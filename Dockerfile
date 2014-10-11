@@ -5,20 +5,19 @@ MAINTAINER blacktop, https://github.com/blacktop
 RUN echo '#!/bin/sh\nexit 101' > /usr/sbin/policy-rc.d && \
     chmod +x /usr/sbin/policy-rc.d
 
-ENV KIBANA_VERSION 3.1.1
-# ENV NGINX_VERSION 1.7.5-1~wheezy
+ENV KIBANA_VERSION 4.0.0-BETA1.1
 
 # Install Required Dependancies
 RUN \
   apt-get -qq update && \
   apt-get -qy install wget --no-install-recommends && \
   wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add - && \
-  echo 'deb http://packages.elasticsearch.org/elasticsearch/1.3/debian stable main' \
+  echo 'deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main' \
     >> /etc/apt/sources.list && \
   echo 'deb http://packages.elasticsearch.org/logstash/1.4/debian stable main' \
     >> /etc/apt/sources.list && \
   apt-get -qq update && \
-  apt-get -qy install  elasticsearch\
+  apt-get -qy install elasticsearch \
                       supervisor \
                       logstash \
                       nginx \
@@ -39,14 +38,16 @@ RUN \
     /etc/nginx/sites-enabled/kibana.conf && \
   cd /opt && tar xzf kibana-$KIBANA_VERSION.tar.gz && \
   ln -s /opt/kibana-$KIBANA_VERSION /var/www/kibana && \
-  sed -i 's/9200"/"+ window.location.port/g' /var/www/kibana/config.js && \
+  sed -i 's/5601/80/g' /var/www/kibana/config/kibana.yml && \
   rm kibana-$KIBANA_VERSION.tar.gz
 
+# sed: can't read /var/www/kibana/config.js: No such file or directory
+ADD bro.conf /etc/logstash/conf.d/
 ADD supervisord.conf /etc/supervisor/conf.d/
 
-VOLUME ["/etc/logstash/conf.d"]
-VOLUME ["/opt/kibana-3.1.1/app/dashboards"]
-VOLUME ["/etc/nginx"]
+# VOLUME ["/etc/logstash/conf.d"]
+# VOLUME ["/opt/kibana-3.1.1/app/dashboards"]
+# VOLUME ["/etc/nginx"]
 
 EXPOSE 80 443
 
