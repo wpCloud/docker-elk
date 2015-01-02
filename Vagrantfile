@@ -70,7 +70,7 @@ Vagrant.configure(2) do |config|
     vb.memory = "4096"
   end
 
-  config.vm.provision :shell, inline: 'wget --no-check-certificate https://raw.githubusercontent.com/aglover/ubuntu-equip/master/equip_java8.sh && bash equip_java8.sh'
+  config.vm.provision "shell", path: "equip_java8.sh"
   config.vm.provision "shell", inline: $INSTALL_DOCKER_AND_ELK
 
   # View the documentation for the provider you are using for more
