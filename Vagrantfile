@@ -4,6 +4,7 @@
 $INSTALL_JAVA8 = <<SCRIPT
 sudo echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 sudo apt-get update -y
+sudo apt-get upgrade -y
 sudo apt-get install build-essential rsync telnet screen man wget -y
 sudo apt-get install strace tcpdump -y
 sudo apt-get install libssl-dev zlib1g-dev libcurl3-dev libxslt-dev -y
@@ -15,12 +16,15 @@ sudo apt-get install oracle-java8-installer -y
 sudo apt-get install ant -y
 SCRIPT
 
-$INSTALL_DOCKER_AND_ELK = <<SCRIPT
+$INSTALL_DOCKER = <<SCRIPT
 echo "alias dl='docker ps -l -q'" >> ~/.bashrc
 echo "alias delc='docker rm `docker ps --no-trunc -a -q`'" >> ~/.bashrc
 echo "alias delcc='docker kill $(docker ps -q) ; docker rm $(docker ps -a -q)'" >> ~/.bashrc
 echo "alias deli='docker images | grep "<none>" | awk '\''{print $3}'\'' | xargs docker rmi'" >> ~/.bashrc
 curl -sSL https://get.docker.io/ubuntu/ | sudo sh
+SCRIPT
+
+$INSTALL_ELK = <<SCRIPT
 export KIBANA_VERSION=4.0.0-beta3
 export ELASTICSEARCH_VERSION=1.4.2
 export LOGSTASH_VERSION=1.4.2
@@ -84,7 +88,8 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision "shell", inline: $INSTALL_JAVA8
-  config.vm.provision "shell", inline: $INSTALL_DOCKER_AND_ELK
+  config.vm.provision "shell", inline: $INSTALL_DOCKER
+  config.vm.provision "shell", inline: $INSTALL_ELK
 
   # View the documentation for the provider you are using for more
   # information on available options.
