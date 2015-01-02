@@ -1,6 +1,19 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+$INSTALL_JAVA8 = <<SCRIPT
+sudo echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+sudo apt-get update -y
+sudo apt-get install build-essential rsync telnet screen man wget -y
+sudo apt-get install strace tcpdump -y
+sudo apt-get install libssl-dev zlib1g-dev libcurl3-dev libxslt-dev -y
+sudo apt-get install software-properties-common python-software-properties -y
+sudo apt-get install git -y
+sudo add-apt-repository ppa:webupd8team/java -y
+sudo apt-get update -y
+sudo apt-get install oracle-java8-installer -y
+sudo apt-get install ant -y
+SCRIPT
 
 $INSTALL_DOCKER_AND_ELK = <<SCRIPT
 echo "alias dl='docker ps -l -q'" >> ~/.bashrc
@@ -70,7 +83,7 @@ Vagrant.configure(2) do |config|
     vb.memory = "4096"
   end
 
-  config.vm.provision "shell", path: "equip_java8.sh"
+  config.vm.provision "shell", inline: $INSTALL_JAVA8
   config.vm.provision "shell", inline: $INSTALL_DOCKER_AND_ELK
 
   # View the documentation for the provider you are using for more
