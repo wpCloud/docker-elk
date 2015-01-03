@@ -44,4 +44,4 @@ rm -rf /bro && \
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 export PATH=/nsm/bro/bin:$PATH
-echo "export KIBANA_VERSION=4.0.0-beta3" | sudo tee -a ~/.bashrc
+echo "export PATH=/nsm/bro/bin:$PATH" | sudo tee -a ~/.bashrc
