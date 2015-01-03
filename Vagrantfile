@@ -39,6 +39,31 @@ curl -s https://download.elasticsearch.org/kibana/kibana/kibana-${KIBANA_VERSION
 /opt/kibana-${KIBANA_VERSION}/bin/kibana
 SCRIPT
 
+$INSTALL_ELK2 = <<SCRIPT
+echo "export KIBANA_VERSION=4.0.0-beta3" >> ~/.bashrc
+echo "export ELASTICSEARCH_VERSION=1.4.2" >> ~/.bashrc
+echo "export LOGSTASH_VERSION=1.4.2" >> ~/.bashrc
+export KIBANA_VERSION=4.0.0-beta3
+export ELASTICSEARCH_VERSION=1.4.2
+export LOGSTASH_VERSION=1.4.2
+wget -qO - https://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -
+sudo add-apt-repository "deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main"
+sudo add-apt-repository "deb http://packages.elasticsearch.org/logstash/1.4/debian stable main"
+curl -s https://download.elasticsearch.org/kibana/kibana/kibana-${KIBANA_VERSION}.tar.gz | tar zx -C /opt
+logstash -e 'input { stdin { } } output { elasticsearch { host => localhost protocol => "http"} }' &
+/opt/kibana-${KIBANA_VERSION}/bin/kibana
+SCRIPT
+
+$INSTALL_ZSH = <<SCRIPT
+apt-get install git-core vim zsh -y
+zsh
+git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+setopt EXTENDED_GLOB
+for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
+  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+done
+chsh -s `which zsh`
+SCRIPT
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -61,6 +86,7 @@ Vagrant.configure(2) do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   config.vm.network "forwarded_port", guest: 5601, host: 8080
+  config.vm.network "forwarded_port", guest: 9200, host: 9200
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -90,9 +116,10 @@ Vagrant.configure(2) do |config|
     vb.memory = "4096"
   end
 
-  config.vm.provision "shell", inline: $INSTALL_JAVA8
-  config.vm.provision "shell", inline: $INSTALL_DOCKER
-  config.vm.provision "shell", inline: $INSTALL_ELK
+  # config.vm.provision "shell", inline: $INSTALL_JAVA8
+  # config.vm.provision "shell", inline: $INSTALL_DOCKER
+  config.vm.provision "shell", inline: $INSTALL_ELK2
+  config.vm.provision "shell", inline: $INSTALL_ZSH
 
   # View the documentation for the provider you are using for more
   # information on available options.
