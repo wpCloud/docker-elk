@@ -34,8 +34,7 @@ RUN \
   ln -s /etc/nginx/sites-available/kibana.conf \
     /etc/nginx/sites-enabled/kibana.conf && \
   ln -s /opt/kibana-$KIBANA_VERSION /var/www/kibana && \
-  sed -i 's/5601/80/g' /var/www/kibana/config/kibana.yml && \
-  rm kibana-$KIBANA_VERSION.tar.gz
+  sed -i 's/5601/80/g' /var/www/kibana/config/kibana.yml
 
 # sed: can't read /var/www/kibana/config.js: No such file or directory
 ADD bro.conf /etc/logstash/conf.d/
@@ -47,8 +46,8 @@ RUN chmod 755 /entrypoint.sh
 # VOLUME ["/opt/kibana-3.1.1/app/dashboards"]
 # VOLUME ["/etc/nginx"]
 
-EXPOSE 80 443
+EXPOSE 80 443 5601
 
-ENTRYPOINT /entrypoint.sh
+# ENTRYPOINT /entrypoint.sh
 
 CMD ["/usr/bin/supervisord"]

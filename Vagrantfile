@@ -25,14 +25,17 @@ curl -sSL https://get.docker.io/ubuntu/ | sudo sh
 SCRIPT
 
 $INSTALL_ELK = <<SCRIPT
+echo "export KIBANA_VERSION=4.0.0-beta3" >> ~/.bashrc
+echo "export ELASTICSEARCH_VERSION=1.4.2" >> ~/.bashrc
+echo "export LOGSTASH_VERSION=1.4.2" >> ~/.bashrc
 export KIBANA_VERSION=4.0.0-beta3
 export ELASTICSEARCH_VERSION=1.4.2
 export LOGSTASH_VERSION=1.4.2
 curl -s https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz | tar zx -C /opt
 curl -s https://download.elasticsearch.org/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz | tar zx -C /opt
 curl -s https://download.elasticsearch.org/kibana/kibana/kibana-${KIBANA_VERSION}.tar.gz | tar zx -C /opt
-/opt/elasticsearch-${ELASTICSEARCH_VERSION}/bin/elasticsearch
-/opt/logstash-${LOGSTASH_VERSION}/bin/logstash -e 'input { stdin { } } output { elasticsearch { host => localhost } }'
+/opt/elasticsearch-${ELASTICSEARCH_VERSION}/bin/elasticsearch &
+/opt/logstash-${LOGSTASH_VERSION}/bin/logstash -e 'input { stdin { } } output { elasticsearch { host => localhost } }' &
 /opt/kibana-${KIBANA_VERSION}/bin/kibana
 SCRIPT
 
