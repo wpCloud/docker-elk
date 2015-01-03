@@ -25,7 +25,7 @@ apt-get clean && \
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install the GeoIPLite Database
-mv /vagrant/geoip/ /usr/share/GeoIP/
+cp /vagrant/geoip/ /usr/share/GeoIP/
 
 gunzip /usr/share/GeoIP/GeoLiteCityv6.dat.gz && \
 gunzip /usr/share/GeoIP/GeoLiteCity.dat.gz && \
