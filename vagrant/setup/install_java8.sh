@@ -3,7 +3,7 @@
 sudo echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 sudo apt-get update -y
 sudo apt-get upgrade -y
-sudo apt-get install build-essential rsync telnet screen man wget -y
+sudo apt-get install build-essential rsync telnet screen man wget zsh vim git-core -y
 sudo apt-get install strace tcpdump -y
 sudo apt-get install libssl-dev zlib1g-dev libcurl3-dev libxslt-dev -y
 sudo apt-get install software-properties-common python-software-properties -y
