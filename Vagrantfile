@@ -35,7 +35,7 @@ curl -s https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticse
 curl -s https://download.elasticsearch.org/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz | tar zx -C /opt
 curl -s https://download.elasticsearch.org/kibana/kibana/kibana-${KIBANA_VERSION}.tar.gz | tar zx -C /opt
 /opt/elasticsearch-${ELASTICSEARCH_VERSION}/bin/elasticsearch &
-/opt/logstash-${LOGSTASH_VERSION}/bin/logstash -e 'input { stdin { } } output { elasticsearch { host => localhost } }' &
+/opt/logstash-${LOGSTASH_VERSION}/bin/logstash -e 'input { stdin { } } output { elasticsearch { host => localhost protocol => "http"} }' &
 /opt/kibana-${KIBANA_VERSION}/bin/kibana
 SCRIPT
 
