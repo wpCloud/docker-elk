@@ -44,4 +44,5 @@ rm -rf /bro && \
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 export PATH=/nsm/bro/bin:$PATH
-echo "export PATH=/nsm/bro/bin:$PATH" | sudo tee -a ~/.bashrc
+echo "export PATH=/nsm/bro/bin:$PATH" | sudo tee -a /home/vagrant/.bashrc
+echo "export PATH=/nsm/bro/bin:$PATH" | sudo tee -a /home/vagrant/.zshrc
