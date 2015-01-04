@@ -45,3 +45,6 @@ rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 export PATH=/nsm/bro/bin:$PATH
 echo "export PATH=/nsm/bro/bin:$PATH" | sudo tee -a ~/.bashrc
+
+# Move logstash bro conf files into place
+cp /vagrant/logstash /etc/logstash/conf.d
