@@ -25,7 +25,7 @@ apt-get clean && \
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install the GeoIPLite Database
-cp /vagrant/geoip/ /usr/share/GeoIP/
+cp /vagrant/geoip/* /usr/share/GeoIP/
 
 gunzip /usr/share/GeoIP/GeoLiteCityv6.dat.gz && \
 gunzip /usr/share/GeoIP/GeoLiteCity.dat.gz && \
@@ -47,4 +47,4 @@ export PATH=/nsm/bro/bin:$PATH
 echo "export PATH=/nsm/bro/bin:$PATH" | sudo tee -a ~/.bashrc
 
 # Move logstash bro conf files into place
-cp /vagrant/logstash /etc/logstash/conf.d
+cp /vagrant/logstash/* /etc/logstash/conf.d/
