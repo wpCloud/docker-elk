@@ -1,70 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-$INSTALL_JAVA8 = <<SCRIPT
-sudo echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
-sudo apt-get update -y
-sudo apt-get upgrade -y
-sudo apt-get install build-essential rsync telnet screen man wget -y
-sudo apt-get install strace tcpdump -y
-sudo apt-get install libssl-dev zlib1g-dev libcurl3-dev libxslt-dev -y
-sudo apt-get install software-properties-common python-software-properties -y
-sudo apt-get install git -y
-sudo add-apt-repository ppa:webupd8team/java -y
-sudo apt-get update -y
-sudo apt-get install oracle-java8-installer -y
-sudo apt-get install ant -y
-SCRIPT
-
-$INSTALL_DOCKER = <<SCRIPT
-echo "alias dl='docker ps -l -q'" >> ~/.bashrc
-echo "alias delc='docker rm `docker ps --no-trunc -a -q`'" >> ~/.bashrc
-echo "alias delcc='docker kill $(docker ps -q) ; docker rm $(docker ps -a -q)'" >> ~/.bashrc
-echo "alias deli='docker images | grep "<none>" | awk '\''{print $3}'\'' | xargs docker rmi'" >> ~/.bashrc
-curl -sSL https://get.docker.io/ubuntu/ | sudo sh
-SCRIPT
-
-$INSTALL_ELK = <<SCRIPT
-echo "export KIBANA_VERSION=4.0.0-beta3" >> ~/.bashrc
-echo "export ELASTICSEARCH_VERSION=1.4.2" >> ~/.bashrc
-echo "export LOGSTASH_VERSION=1.4.2" >> ~/.bashrc
-export KIBANA_VERSION=4.0.0-beta3
-export ELASTICSEARCH_VERSION=1.4.2
-export LOGSTASH_VERSION=1.4.2
-curl -s https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz | tar zx -C /opt
-curl -s https://download.elasticsearch.org/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz | tar zx -C /opt
-curl -s https://download.elasticsearch.org/kibana/kibana/kibana-${KIBANA_VERSION}.tar.gz | tar zx -C /opt
-/opt/elasticsearch-${ELASTICSEARCH_VERSION}/bin/elasticsearch &
-/opt/logstash-${LOGSTASH_VERSION}/bin/logstash -e 'input { stdin { } } output { elasticsearch { host => localhost protocol => "http"} }' &
-/opt/kibana-${KIBANA_VERSION}/bin/kibana
-SCRIPT
-
-$INSTALL_ELK2 = <<SCRIPT
-echo "export KIBANA_VERSION=4.0.0-beta3" >> ~/.bashrc
-echo "export ELASTICSEARCH_VERSION=1.4.2" >> ~/.bashrc
-echo "export LOGSTASH_VERSION=1.4.2" >> ~/.bashrc
-export KIBANA_VERSION=4.0.0-beta3
-export ELASTICSEARCH_VERSION=1.4.2
-export LOGSTASH_VERSION=1.4.2
-wget -qO - https://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -
-sudo add-apt-repository "deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main"
-sudo add-apt-repository "deb http://packages.elasticsearch.org/logstash/1.4/debian stable main"
-sudo apt-get update && sudo apt-get install elasticsearch logstash -y
-curl -s https://download.elasticsearch.org/kibana/kibana/kibana-${KIBANA_VERSION}.tar.gz | tar zx -C /opt
-logstash -e 'input { stdin { } } output { elasticsearch { host => localhost protocol => "http"} }' &
-/opt/kibana-${KIBANA_VERSION}/bin/kibana &
-SCRIPT
-
-$INSTALL_ZSH = <<SCRIPT
-apt-get install git-core vim zsh -y
-zsh
-git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
-setopt EXTENDED_GLOB
-for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
-  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
-done
-chsh -s `which zsh`
-SCRIPT
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -114,17 +50,14 @@ Vagrant.configure(2) do |config|
 
     # Customize the amount of memory on the VM:
     vb.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+    vb.cpu = "4"
     vb.memory = "4096"
   end
 
-  # config.vm.provision "shell", inline: $INSTALL_JAVA8
-  # config.vm.provision "shell", inline: $INSTALL_DOCKER
-  # config.vm.provision "shell", inline: $INSTALL_ELK2
   config.vm.provision "shell", path: "setup/install_java8.sh"
   config.vm.provision "shell", path: "setup/install_elk.sh"
   config.vm.provision "shell", path: "setup/install_bro.sh"
   config.vm.provision "shell", path: "setup/install_prezto.sh"
-  # config.vm.provision "shell", inline: $INSTALL_ZSH
 
   # View the documentation for the provider you are using for more
   # information on available options.
