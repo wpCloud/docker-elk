@@ -22,7 +22,7 @@ $ docker build -t blacktop/elk github.com/blacktop/docker-elk
 ```bash
 $ docker run -d --name elk -p 80:5601 blacktop/elk
 ```
-#### Now navigate to `$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' elk):80`
+Now navigate to `$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' elk):80`
 
 #### If you are using [boot2docker](http://boot2docker.io)
 ```bash
@@ -32,7 +32,7 @@ As a convience you can add the **boot2docker** IP to you **/etc/hosts** file:
 ```bash
 $ echo $(boot2docker ip) dockerhost | sudo tee -a /etc/hosts
 ```
-- Navigate to http://dockerhost from your host (OSX)
+Now you can navigate to http://dockerhost from your host
 
 ### Todo
 - [x] Install/Run ELK
