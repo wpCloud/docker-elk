@@ -9,6 +9,8 @@
 # Usage: curl -L https://raw-gist-file-address-here.sh | zsh && chsh -s $(which zsh)
 #
 
+HOME=/home/vagrant
+
 echo "Cloning prezto"
 rm -rf "${ZDOTDIR:-$HOME}/.zprezto"
 git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"

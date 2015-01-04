@@ -12,5 +12,6 @@ sudo add-apt-repository "deb http://packages.elasticsearch.org/logstash/1.4/debi
 sudo apt-get update && sudo apt-get install elasticsearch logstash -y
 sudo update-rc.d elasticsearch defaults 95 10
 curl -s https://download.elasticsearch.org/kibana/kibana/kibana-${KIBANA_VERSION}.tar.gz | tar zx -C /opt
-/opt/logstash/bin/logstash -e 'input { stdin { } } output { elasticsearch { host => localhost protocol => "http"} }' &
-/opt/kibana-${KIBANA_VERSION}/bin/kibana
+mv /opt/kibana-${KIBANA_VERSION} /opt/kibana
+# /opt/logstash/bin/logstash -e 'input { stdin { } } output { elasticsearch { host => localhost protocol => "http"} }' &
+# /opt/kibana-${KIBANA_VERSION}/bin/kibana
