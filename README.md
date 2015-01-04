@@ -6,7 +6,7 @@ This repository contains a **Dockerfile** of [ELK](http://www.elasticsearch.org/
 
 ### Dependencies
 
-* [java:8](https://index.docker.io/_/java/)
+* [debian:wheezy](https://index.docker.io/_/debian/)
 
 ### Installation
 
@@ -20,14 +20,19 @@ $ docker build -t blacktop/elk github.com/blacktop/docker-elk
 ```
 ### Usage
 ```bash
-$ docker run -i -t -p 8080:80 blacktop/elk
+$ docker run -d --name elk -p 80:5601 blacktop/elk
 ```
-#### Now navigate to `<Container's IP>:8080`
+#### Now navigate to `$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' elk):80`
 
 #### If you are using [boot2docker](http://boot2docker.io)
 ```bash
-Navigate to $(boot2docker ip):8080
+Navigate to $(boot2docker ip)
 ```
+As a convience you can add the **boot2docker** IP to you **/etc/hosts** file:
+```bash
+$ echo $(boot2docker ip) dockerhost | sudo tee -a /etc/hosts
+```
+- Navigate to http://dockerhost from your host (OSX)
 
 ### Todo
 - [x] Install/Run ELK
