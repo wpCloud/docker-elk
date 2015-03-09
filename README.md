@@ -48,7 +48,7 @@ As a convience you can add the **boot2docker** IP to you **/etc/hosts** file:
 ```bash
 $ echo $(boot2docker ip) dockerhost | sudo tee -a /etc/hosts
 ```
-Now you can navigate to http://dockerhost from your host
+Now you can navigate to [http://dockerhost](http://dockerhost) from your host
 
 ### Todo
 - [x] Install/Run ELK
