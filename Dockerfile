@@ -24,7 +24,13 @@ ADD https://download.elasticsearch.org/kibana/kibana/kibana-$KIBANA_VERSION.tar.
 ADD kibana.conf /etc/nginx/sites-available/
 
 # Configure Nginx
-RUN mkdir -p /var/www \
+RUN cd /opt \
+  && echo "Installing Kibana $KIBANA_VERSION..." \
+  && tar xzf kibana-$KIBANA_VERSION.tar.gz \
+  && ln -s /opt/kibana-$KIBANA_VERSION /opt/kibana \
+  && rm kibana-$KIBANA_VERSION.tar.gz \
+  && echo "Configuring Nginx..." \
+  && mkdir -p /var/www \
   && ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log \
   && echo "\ndaemon off;" >> /etc/nginx/nginx.conf \
@@ -33,12 +39,6 @@ RUN mkdir -p /var/www \
 
 # Add admin/admin web user account
 COPY htpasswd /etc/nginx/.htpasswd
-
-# Install Kibana
-RUN cd /opt \
-  && tar xzf kibana-$KIBANA_VERSION.tar.gz \
-  && ln -s /opt/kibana-$KIBANA_VERSION /opt/kibana \
-  && rm kibana-$KIBANA_VERSION.tar.gz
 
 ADD supervisord.conf /etc/supervisor/conf.d/
 

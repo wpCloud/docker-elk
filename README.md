@@ -8,6 +8,20 @@ This repository contains a **Dockerfile** of [ELK](http://www.elasticsearch.org/
 
 * [debian:wheezy](https://index.docker.io/_/debian/)
 
+### Image Sizes
+| Image | Virtual Size | ELK Kibana4   | TOTAL     |
+|:------:|:-----------:|:-------------:|:---------:|
+| debian | 85.1  MB    | 447 MB        | 532.1 MB  |
+
+### Image Tags
+```bash
+$ docker images
+
+REPOSITORY          TAG                 VIRTUAL SIZE
+blacktop/elk        latest              542   MB
+blacktop/elk        kibana4             542   MB
+```
+
 ### Installation
 
 1. Install [Docker](https://www.docker.io/).
@@ -20,15 +34,17 @@ $ docker build -t blacktop/elk github.com/blacktop/docker-elk
 ```
 ### Usage
 ```bash
-$ docker run -d --name elk -p 80:5601 blacktop/elk
+$ docker run -d --name elk -p 80:80 blacktop/elk
 ```
-Now navigate to `$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' elk):80`
+Now navigate to `$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' elk)`
 
 #### If you are using [boot2docker](http://boot2docker.io)
+
 ```bash
 Navigate to $(boot2docker ip)
 ```
 As a convience you can add the **boot2docker** IP to you **/etc/hosts** file:
+
 ```bash
 $ echo $(boot2docker ip) dockerhost | sudo tee -a /etc/hosts
 ```
