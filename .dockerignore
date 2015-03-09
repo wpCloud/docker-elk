@@ -1,0 +1,7 @@
+Dockerfile
+.dockerignore
+logstash/*
+vagrant/*
+logo.png
+README.md
+SIGNED.md
