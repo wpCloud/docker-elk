@@ -45,6 +45,6 @@ ADD supervisord.conf /etc/supervisor/conf.d/
 VOLUME ["/etc/logstash/conf.d"]
 VOLUME ["/etc/nginx"]
 
-EXPOSE 80 443
+EXPOSE 80 443 9200
 
 CMD ["/usr/bin/supervisord"]
